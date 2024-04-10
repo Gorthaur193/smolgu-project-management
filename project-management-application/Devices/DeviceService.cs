@@ -6,4 +6,34 @@ public class DeviceService(IRepository<Device> repository) : IServise
 
     public async Task<IEnumerable<DeviceDTO>> GetDevices(CancellationToken cancellationToken = default) =>
         (await Repository.Get(cancellationToken)).Cast<DeviceDTO>();
+
+    public async Task RegisterOrUpdateDevices(IEnumerable<DeviceDTO> devices, CancellationToken cancellationToken = default)
+    {
+        var newDevices = from device in devices
+                         where device.Id is null
+                         select new Device()
+                         {
+                             Capability = device.Capability,
+                             Description = device.Description,
+                             Name = device.Name,
+                             Productivity = device.Productivity
+                         };
+
+        var repo = await Repository.Get(cancellationToken);
+        var newOldDeviceCouples = from device in (from device in devices where device.Id is not null select device)
+                                  join repDevice in repo on device.Id equals repDevice.Id
+                                  select (device, repDevice);
+
+        foreach (var (updatedDevice, oldDevice) in newOldDeviceCouples)
+        {
+            oldDevice.Name = updatedDevice.Name;
+            oldDevice.Capability = updatedDevice.Capability;
+            oldDevice.Description = updatedDevice.Description;
+            oldDevice.Productivity = updatedDevice.Productivity;
+        }
+
+        // todo: validation object
+        await Repository.AddRange(newDevices, cancellationToken);
+        await Repository.UpdateRange(repo, cancellationToken);
+    }        
 }

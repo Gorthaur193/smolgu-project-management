@@ -9,7 +9,7 @@ public class JobTitleService(IRepository<JobTitle> repository) : IServise
 
     public async Task AddJobTitle(string newTitle, CancellationToken cancellationToken)
     {
-        var potentialCopies = await Repository.GetWithoutTracking(x => x.Name.ToLower() == newTitle.ToLower().Trim(), cancellationToken);
+        var potentialCopies = await Repository.GetWithoutTracking(x => x.Name.Equals(newTitle, StringComparison.CurrentCultureIgnoreCase), cancellationToken);
         if (potentialCopies.Any())
             throw new SimilarJobTitleException(newTitle);
         await Repository.Add(new() { Name = newTitle }, cancellationToken);

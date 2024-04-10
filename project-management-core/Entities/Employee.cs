@@ -11,6 +11,6 @@ public class Employee : IEntity
 
     public virtual JobTitle JobTitle { get; set; }
     public virtual Employee? Supervisor { get; set; }
-    public virtual ICollection<Employee> Employees { get; set; }
+    public virtual ICollection<Employee> Supervisee { get; set; }
     public virtual ICollection<Project> Projects { get; set; }
 }
