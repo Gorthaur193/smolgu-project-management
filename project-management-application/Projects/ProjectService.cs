@@ -4,24 +4,24 @@ public class ProjectService(IRepository<Project> repository) : IServise
 {
     private IRepository<Project> Repository { get; init; } = repository;
 
-    public async Task<IEnumerable<ProjectDTO>> GetProjects(CancellationToken cancellationToken = default) =>
-        (await Repository.Get(cancellationToken)).Cast<ProjectDTO>();
+    public async Task<IEnumerable<ProjectDTO>> GetProjectsAsync(CancellationToken cancellationToken = default) =>
+        (await Repository.Get(cancellationToken)).Select(x => (ProjectDTO)x);
 
-    public async Task<IEnumerable<DeviceDTO>> GetProjectsDevices(Guid projectId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<DeviceDTO>> GetProjectsDevicesAsync(Guid projectId, CancellationToken cancellationToken = default)
     {
         var potentialProject = (await Repository.GetWithoutTracking(x => x.Id.Value == projectId, cancellationToken)).FirstOrDefault() ??
             throw new ProjectNotFoundException(projectId);
         return potentialProject.Devices.Cast<DeviceDTO>();
     }
 
-    public async Task<IEnumerable<EmployeeDTO>> GetProjectsEmployees(Guid projectId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<EmployeeDTO>> GetProjectsEmployeesAsync(Guid projectId, CancellationToken cancellationToken = default)
     {
         var potentialProject = (await Repository.GetWithoutTracking(x => x.Id.Value == projectId, cancellationToken)).FirstOrDefault() ??
             throw new ProjectNotFoundException(projectId);
         return potentialProject.Devices.Cast<EmployeeDTO>();
     }
 
-    public async Task CreateOrUpdateProject(ProjectDTO project, CancellationToken cancellationToken = default)
+    public async Task CreateOrUpdateProjectAsync(ProjectDTO project, CancellationToken cancellationToken = default)
     {
         Project localProj;
         if (project.Id is not null)

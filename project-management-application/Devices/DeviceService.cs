@@ -4,10 +4,10 @@ public class DeviceService(IRepository<Device> repository) : IServise
 {
     private IRepository<Device> Repository { get; init; } = repository;
 
-    public async Task<IEnumerable<DeviceDTO>> GetDevices(CancellationToken cancellationToken = default) =>
-        (await Repository.Get(cancellationToken)).Cast<DeviceDTO>();
+    public async Task<IEnumerable<DeviceDTO>> GetDevicesAsync(CancellationToken cancellationToken = default) =>
+        (await Repository.Get(cancellationToken)).Select(x => (DeviceDTO)x);
 
-    public async Task RegisterOrUpdateDevices(IEnumerable<DeviceDTO> devices, CancellationToken cancellationToken = default)
+    public async Task RegisterOrUpdateDevicesAsync(IEnumerable<DeviceDTO> devices, CancellationToken cancellationToken = default)
     {
         var newDevices = from device in devices
                          where device.Id is null

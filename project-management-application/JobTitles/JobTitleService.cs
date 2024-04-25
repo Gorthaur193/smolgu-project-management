@@ -7,7 +7,7 @@ public class JobTitleService(IRepository<JobTitle> repository) : IServise
     public Task<IEnumerable<JobTitle>> GetJobTitlesAsync(CancellationToken cancellationToken = default) =>
         Repository.Get(cancellationToken);
 
-    public async Task AddJobTitle(string newTitle, CancellationToken cancellationToken)
+    public async Task AddJobTitleAsync(string newTitle, CancellationToken cancellationToken = default)
     {
         var potentialCopies = await Repository.GetWithoutTracking(x => x.Name.Equals(newTitle, StringComparison.CurrentCultureIgnoreCase), cancellationToken);
         if (potentialCopies.Any())
