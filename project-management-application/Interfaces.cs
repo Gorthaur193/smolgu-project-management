@@ -1,3 +1,3 @@
 ﻿namespace ProjectManagement.Application;
 
-public interface IServise;
+public interface IService;

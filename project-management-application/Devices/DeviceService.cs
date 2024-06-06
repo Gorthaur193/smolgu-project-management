@@ -1,6 +1,6 @@
 ﻿namespace ProjectManagement.Application.Devices;
 
-public class DeviceService(IRepository<Device> repository) : IServise
+public class DeviceService(IRepository<Device> repository) : IService
 {
     private IRepository<Device> Repository { get; init; } = repository;
 

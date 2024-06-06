@@ -1,6 +1,6 @@
 ﻿namespace ProjectManagement.Application.JobTitles;
 
-public class JobTitleService(IRepository<JobTitle> repository) : IServise
+public class JobTitleService(IRepository<JobTitle> repository) : IService
 {
     private IRepository<JobTitle> Repository { get; init; } = repository;
 

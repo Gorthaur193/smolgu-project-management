@@ -1,6 +1,6 @@
 ﻿namespace ProjectManagement.Application.Projects;
 
-public class ProjectService(IRepository<Project> repository) : IServise
+public class ProjectService(IRepository<Project> repository) : IService
 {
     private IRepository<Project> Repository { get; init; } = repository;
 
